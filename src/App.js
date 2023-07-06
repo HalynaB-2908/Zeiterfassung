@@ -1,25 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import Timer from './Timer.js';
+import AddNew from './AddNew.js';
+import ProjectCard from './ProjectCard.js';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <div className="row">
+        <div className="col-9">
+      <Timer/>
+      </div>
+      <div className="col-3 mt-4">
+      <AddNew/>
+      </div>
+      </div>
       </header>
+      <ProjectCard/>
     </div>
   );
 }
-
 export default App;
