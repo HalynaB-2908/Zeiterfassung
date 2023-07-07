@@ -23,9 +23,9 @@ export default function Timer() {
             <span>{ ("0" + Math.floor((time / 1000) % 60)).slice(-2)} : </span>
             <span>{ ("0" + ((time / 10) % 100)).slice(-2)} </span>  
             {running ? (
-                <button type="button" class="btn btn-outline-secondary " onClick={()=> {setRunning(false)}}>Pause</button>
-            ) : (<button type="button" class="btn btn-outline-secondary m-2" onClick={()=> {setRunning(true)}}>Start</button>)}       
-            <button type="button" class="btn btn-outline-secondary" onClick={()=> {setTime(0)}}>Reset</button>
+                <button type="button" className="btn btn-outline-secondary time-btn" onClick={()=> {setRunning(false)}}>Pause</button>
+            ) : (<button type="button" className="btn btn-outline-secondary m-2 time-btn" onClick={()=> {setRunning(true)}}>Start</button>)}       
+            <button type="button" className="btn btn-outline-secondary time-btn" onClick={()=> {setTime(0)}}>Reset</button>
             </div>
         </div>
     );
