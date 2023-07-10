@@ -5,32 +5,18 @@ import { useState } from 'react';
 
 export default function ProjectCard(props) {
     const [projects, setProjects] = useState(
-        [
-            {
-                "name" : "first",
-                "in process" : true,
-                "time" : "0 h, 0 min",
-                "id" : 1,
-            },
-            {
-                "name" : "second",
-                "in process" : false,
-                "time" : "0 h, 0 min",
-                "id" : 2,
-            },
-            {
-                "name" : "third",
-                "in process" : false,
-                "time" : "0 h, 0 min",
-                "id" : 3,
-        }
-        ]
+        props.projects
     );
     const deleteProject = (id) => {
         setProjects(prevProjects => prevProjects.filter(project => project.id !== id));
     };
+    if(!props.projects) {
+        return (<></>) 
+    }
+    else {
     return (
         <>
+       
             {projects.map(item => (
                 <Card className="m-3">
                     <Card.Header>{props.name}</Card.Header>
@@ -49,4 +35,5 @@ export default function ProjectCard(props) {
             ))}
         </>
     );
+            }
   }

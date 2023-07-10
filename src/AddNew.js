@@ -1,78 +1,76 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 import Timer from './Timer.js';
 
-export default function AddNew({onProjectNameChange}) {
+function ProjectCard(props) {
+  const deleteProject = (id) => {
+      props.setProjects(prevProjects => prevProjects.filter(project => project.id !== id));
+  };
+  if(!props.projects) {
+      return null;
+  }
+  return (
+      <>
+          {props.projects.map(item => (
+              <Card key={item.id} className="m-3">
+                  <Card.Header>{item.name}</Card.Header>
+                  <Card.Body>
+                  <div className="row">
+                  <div className="col-6">
+                      <Card.Title>Tasks</Card.Title>               
+                      <Button variant="outline-danger" onClick={() => deleteProject(item.id)}>Del</Button>
+                      </div>
+                      <div className="col-6">
+                      <Timer/>
+                      </div>
+                      </div>
+                  </Card.Body>
+              </Card>
+          ))}
+      </>
+  );
+          
+}
+
+export default function AddNew() {
   const [show, setShow] = useState(false);
   const [projectName, setProjectName] = useState("");
-  const [projects, setProjects] = useState(
-    [
-        {
-            "name" : "first",
-            "in process" : true,
-            "time" : "0 h, 0 min",
-            "id" : 1,
-        },
-        {
-            "name" : "second",
-            "in process" : false,
-            "time" : "0 h, 0 min",
-            "id" : 2,
-        },
-        {
-            "name" : "third",
-            "in process" : false,
-            "time" : "0 h, 0 min",
-            "id" : 3,
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const savedProjects = localStorage.getItem("projects");
+    if(savedProjects) {
+      setProjects(JSON.parse(savedProjects));
     }
-    ]
-);
-const deleteProject = (id) => {
-  setProjects(prevProjects => prevProjects.filter(project => project.id !== id));
-};
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("projects", JSON.stringify(projects));
+  }, [projects]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const addProjectName = (event) => {
     setProjectName(event.target.value);
   }
-  const i = 0;
-  const addCard = (id) => {
-    let project = {
-      "name" : {projectName},
-      "in process" : false,
-      "time" : "0 h, 0 min",
-      "id" : i+1,
-
-    }
-    projects.push(project);
-    return (
-      <>
-      <Card className="m-3">
-      <Card.Header>{projectName}</Card.Header>
-      <Card.Body>
-      <div className="row">
-      <div className="col-6">
-          <Card.Title>Tasks</Card.Title>               
-          <Button variant="outline-danger" onClick={() => deleteProject(id)}>Del</Button>
-          </div>
-          <div className="col-6">
-          <Timer/>
-          </div>
-          </div>
-      </Card.Body>
-  </Card>
-  </>
-    )
+  const addProject = () => {
+    const id = projects.length + 1;
+    const newProject = {
+      name: projectName,
+      "in process": false,
+      time: "0 h, 0 min",
+      id: id,
+    };
+    setProjects(prevProjects => [...prevProjects, newProject]);
+    setShow(false);
+    setProjectName("");
   }
-  return (
+return (
     <>
       <Button variant="outline-secondary add-button" onClick={handleShow}>
         Add new Project
       </Button>
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Let's add new Project</Modal.Title>
@@ -82,7 +80,9 @@ const deleteProject = (id) => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Type project name</Form.Label>
               <Form.Control
-                type="text" onInput={addProjectName}
+                  type="text"
+                  value={projectName}
+                  onChange={addProjectName}
               />
             </Form.Group>
             <Form.Group
@@ -93,11 +93,12 @@ const deleteProject = (id) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={addProject}>
             Add Project
           </Button>
         </Modal.Footer>
       </Modal>
+      <ProjectCard projects = {projects} setProjects={setProjects}/>
     </>
   );
 }
