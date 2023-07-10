@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
 
-export default function Timer() {
+export default function Timer(props) {
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
 
@@ -16,6 +16,15 @@ export default function Timer() {
         }
         return () => clearInterval(interval);
         }, [running]);
+    
+    useEffect(() => {
+        localStorage.setItem(`timer_${props.projectId}`, JSON.stringify(time));
+
+    }, [time, props.projectId]);
+
+    useEffect(() => {
+        const savedTime = localStorage.getItem(`timer_${props.projectId}`);
+    }, [props.projectId]);
     return (
         <div className='Timer'>
         <div className='Time-content'>
