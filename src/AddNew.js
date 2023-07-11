@@ -24,7 +24,7 @@ function ProjectCard(props) {
                       <Button variant="outline-danger" onClick={() => deleteProject(item.id)}>Del</Button>
                       </div>
                       <div className="col-6">
-                      <Timer/>
+                      <Timer projectId={item.id}/>
                       </div>
                       </div>
                   </Card.Body>
